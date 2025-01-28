@@ -75,14 +75,16 @@ fn create_shareable_mpv(window_handle: HWND) -> Arc<Mpv> {
         }
         set_property!("wid", window_handle as i64);
         set_property!("title", "Stremio");
+        set_property!("audio-client-name", "Stremio");
         set_property!("config", "yes");
         set_property!("load-scripts", "yes");
         set_property!("terminal", "yes");
+        #[cfg(debug_assertions)]
         set_property!("msg-level", "all=no,cplayer=debug");
+        #[cfg(not(debug_assertions))]
+        set_property!("msg-level", "all=no");
         set_property!("quiet", "yes");
         set_property!("hwdec", "auto");
-        // FIXME: very often the audio track isn't selected when using "aid" = "auto"
-        set_property!("aid", "1");
         Ok(())
     });
     Arc::new(mpv.expect("cannot build MPV"))
